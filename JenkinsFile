@@ -86,7 +86,7 @@ pipeline {
         script {
             try {
                 withAWS(credentials: 'aws-key', region: 'ap-south-1') {
-                    withKubeConfig(credentialsId: 'kubernetes', region: 'ap-south-1') {
+                    withKubeConfig(credentialsId: 'kubernetes') {
                         sh 'kubectl apply -f deployment-service.yaml'
                     }
                 }
