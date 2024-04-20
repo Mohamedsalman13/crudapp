@@ -30,7 +30,7 @@ pipeline {
         stage('Quality Check') {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-scanner' 
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
                 }
             }
         }
@@ -79,6 +79,17 @@ pipeline {
             steps {
                 sh 'trivy image spacemax/crudapp:latest > trivyimage.txt' 
             }
+        }
+
+        stage('Deploy to kubernets'){
+            steps{
+                withAWS(credentials: 'aws-key', region: 'ap-south-1') {
+                script{
+                    withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kubernetes', namespace: '', restrictKubeConfigAccess: false, serverUrl: '') {
+                        sh 'kubectl apply -f deployment-service.yaml'
+                    }
+                }
+            }   }
         }
         
                 }
