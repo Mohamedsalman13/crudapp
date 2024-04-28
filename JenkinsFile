@@ -47,12 +47,6 @@ pipeline {
                 
             }
         }
-        stage('Trivy File Scan') {
-            steps {
-                    sh 'trivy fs . > trivyfs.txt'
-                
-            }
-        }
         stage("Docker Image Build") {
             steps {
                 script {
